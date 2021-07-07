@@ -1,7 +1,6 @@
 #Content Management System for my website
 #Inspired by Luke Smith's lb: https://github.com/LukeSmithxyz/lb
 
-
 #path to directory of html articles
 #path to list of chronological entries (list.html)
 #path to list of topics or tags (topics.html)
@@ -10,7 +9,6 @@
 #maintain tags by article (n tags)
 #store list of tags
 #Article = (name, date, tag1,...tag n)
-
 
 import sys
 import argparse
@@ -46,6 +44,10 @@ def main():
                 for line in oldfile:
                     if "Title" in line:
                         new_file.write("        <h1>"+title+"</h1>\n")
+                    elif "TAGS" in line:
+                        new_file.write("<h3>Tags</h3>")
+                        for t in tags:
+                            new_file.write("<h4>"+t+"</h4>")
                     else:
                         new_file.write(line)
         day = date.today()
@@ -87,7 +89,7 @@ def main():
             for line in f:
                 if "INSERT LIST HERE" in line:
                     for p in posts:
-                        temp.write("<li>"+p[1]+"\t<a href="+path2articles+p[0]+".html>"+p[0]+"</a></li>\n")
+                        temp.write("<li>"+p[1]+"\t<a href=articles/"+p[0]+".html>"+p[0]+"</a></li>\n")
                 else:
                     temp.write(line)
         temp.close()
@@ -98,6 +100,10 @@ def main():
                 if "INSERT TOPICS HERE" in line:
                     for t in tags:
                         temp.write("<h1>"+t+"</h1>\n")
+                        for p in posts:
+                            if t in p[1:]:
+                                print(p , " " , t)
+                                temp.write("<h3><a href=articles/"+p[0]+".html>"+p[0]+"</a></h3>\n")
                 else:
                     temp.write(line)
         temp.close()
