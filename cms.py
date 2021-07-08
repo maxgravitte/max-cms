@@ -15,13 +15,16 @@ import argparse
 from shutil import copyfile
 from datetime import date
 import csv
-
+import os
 path2writing  = "/home/maxwell/Website2021/writing"
 path2articles = "/home/maxwell/Website2021/writing/articles/"
 path2list     = "/home/maxwell/Website2021/writing/list-template.html"
 path2topics   = "/home/maxwell/Website2021/writing/topics-template.html"
 path2store    = "/home/maxwell/Website2021/writing/.store.cvs"
 path2template = "/home/maxwell/Website2021/writing/template0.html"
+
+def fix(t):
+    return t.replace(' ', '-')
 
 def main():
     parser = argparse.ArgumentParser(description='Simple HTML blogging system.')
@@ -34,8 +37,9 @@ def main():
         print("initializing data store")
 
     if args.new:
-        title = input("Enter title: ") 
-        path2new = path2articles+title+".html"
+        title = input("Enter title: ")
+        newtitle = fix(title)
+        path2new = path2articles+newtitle+".html"
         copyfile(path2template,path2new)
         tags = input("Enter topic(s): ")
         tags = tags.split(' ')
@@ -64,6 +68,7 @@ def main():
         for row in obj:
             if row[0] == title:
                 print('found article to delete')
+                os.remove(path2articles+fix(title)+".html")
             else:
                 lines.append(row)
         csvfile.close()
